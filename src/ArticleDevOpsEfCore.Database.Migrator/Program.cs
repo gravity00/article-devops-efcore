@@ -5,18 +5,47 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-var builder = Host.CreateApplicationBuilder(args);
+using var cts = new CancellationTokenSource();
+Console.CancelKeyPress += (_, eventArgs) =>
+{
+    // ReSharper disable once AccessToDisposedClosure
+    cts.Cancel();
+    eventArgs.Cancel = true;
+};
 
-ConfigureLogging(
-    builder.Logging
-);
+ILogger<Program> logger = null;
+try
+{
+    var builder = Host.CreateApplicationBuilder(args);
 
-ConfigureServices(
-    builder.Services,
-    builder.Configuration
-);
+    ConfigureLogging(
+        builder.Logging
+    );
 
-using var host = builder.Build();
+    ConfigureServices(
+        builder.Services,
+        builder.Configuration
+    );
+
+    using var host = builder.Build();
+
+    logger = host.Services.GetRequiredService<ILogger<Program>>();
+
+    var migrator = host.Services.GetRequiredService<Migrator>();
+    await migrator.RunAsync(cts.Token);
+}
+catch (Exception e)
+{
+    if (logger is null)
+    {
+        await Console.Error.WriteLineAsync("Application failed with a fatal error");
+        await Console.Error.WriteLineAsync(e.ToString());
+    }
+    else
+        logger.LogCritical(e, "Application failed with a fatal error");
+
+    throw;
+}
 
 return;
 
@@ -37,4 +66,6 @@ static void ConfigureServices(
         connectionString,
         o => o.MigrationsAssembly(typeof(Program).Assembly.FullName)
     ), ServiceLifetime.Singleton);
+
+    services.AddSingleton<Migrator>();
 }
