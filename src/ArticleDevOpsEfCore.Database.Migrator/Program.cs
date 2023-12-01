@@ -4,11 +4,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+// ReSharper disable once AccessToDisposedClosure
 
 using var cts = new CancellationTokenSource();
 Console.CancelKeyPress += (_, eventArgs) =>
 {
-    // ReSharper disable once AccessToDisposedClosure
     cts.Cancel();
     eventArgs.Cancel = true;
 };
