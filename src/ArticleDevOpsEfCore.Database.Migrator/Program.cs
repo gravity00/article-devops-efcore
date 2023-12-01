@@ -32,7 +32,10 @@ try
     logger = host.Services.GetRequiredService<ILogger<Program>>();
 
     var migrator = host.Services.GetRequiredService<Migrator>();
+
+    logger.LogDebug("Running migrator");
     await migrator.RunAsync(cts.Token);
+    logger.LogInformation("Migrator run successfully");
 }
 catch (Exception e)
 {
