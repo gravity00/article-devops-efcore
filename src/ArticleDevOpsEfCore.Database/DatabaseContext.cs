@@ -2,13 +2,8 @@
 
 namespace ArticleDevOpsEfCore.Database;
 
-public class DatabaseContext : DbContext
+public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbContext(options)
 {
-    public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
-    {
-
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
