@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ArticleDevOpsEfCore.Database.Migrator": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "development"
+      }
+    }
+  }
+}
