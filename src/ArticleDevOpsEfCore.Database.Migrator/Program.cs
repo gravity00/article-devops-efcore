@@ -1,4 +1,5 @@
 ﻿using ArticleDevOpsEfCore.Database;
+using ArticleDevOpsEfCore.Database.DataSeeds;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -71,4 +72,6 @@ static void ConfigureServices(
     ), ServiceLifetime.Singleton);
 
     services.AddSingleton<Migrator>();
+
+    services.AddSingleton<IDataSeed, TestProductsDataSeed>();
 }
