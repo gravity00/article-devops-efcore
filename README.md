@@ -1,5 +1,3 @@
-# [article-devops-efcore
-
 # .NET — DevOps and Entity Framework Core
 
 Example project for setting up a console application that can be used into a Continuous Delivery pipeline for applying Entity Framework Core migrations and seed default data.
